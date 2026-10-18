@@ -1,119 +1,90 @@
-# AP3 - Seminario de Practica - Sistema de Gestion de Servicio Tecnico
+# Sistema de Gestión de Servicio Técnico - AP3
 
-**Marcos Waigel | Licenciatura en Informatica | Universidad Siglo 21 | 2026**
+**Seminario de Práctica | Licenciatura en Informática | Universidad Siglo 21 | 2026**  
+**Autor: Marcos Waigel**
 
-Prototipo **incremental** desarrollado a partir de los codigos de AP1 y AP2. Se conserva el flujo de ordenes, diagnosticos, presupuestos, reparaciones, repuestos e historial y se incorporan entidades orientadas a objetos, polimorfismo y operaciones de busqueda/ordenacion.
+## Descripción
 
-## Requisitos
+Prototipo incremental de gestión de un servicio técnico informático, desarrollado en Java con persistencia relacional en MySQL. La tercera iteración continúa el sistema de AP1 y AP2, conservando la administración de clientes, equipos, órdenes, diagnósticos, presupuestos, reparaciones, repuestos y estados. Incorpora un modelo de dominio orientado a objetos y operaciones de consulta y ordenación.
 
-- JDK 17 o superior (se verifico compilacion con OpenJDK 21).
-- MySQL 8.x y un usuario MySQL con acceso al esquema `servicio_tecnico`.
-- **MySQL Connector/J** en el classpath **al ejecutar** operaciones con BD.
-- IDE Java a eleccion (IntelliJ IDEA Community, Eclipse, NetBeans o VS Code con Java).
+## Tecnologías
 
-## Preparacion de BD (conservar datos previos)
+- Java 17 o superior y JDBC.
+- MySQL 8.x.
+- MySQL Connector/J para ejecutar las operaciones con la base de datos.
+- Entorno de desarrollo Java compatible.
 
-- **Base nueva**: ejecutar en MySQL Workbench `sql/schema.sql` y despues **una unica vez** `sql/ap2_migracion.sql`.
-- **Base existente de AP2**: **NO** reejecutar `ap2_migracion.sql`. AP3 **no requiere** una nueva migracion; utiliza el mismo esquema AP2.
-- Opcional: ejecutar `sql/datos_demo.sql` para tecnico y repuesto de practica. Revisar los IDs reales que devuelve. Solo usarlo en entorno de pruebas.
-- `sql/consultas.sql` proviene de AP2 e incluye datos y borrado de ejemplo; para verificar sin modificar datos, usar `sql/validacion.sql`.
+## Organización del proyecto
 
-Usar preferentemente credenciales de usuario MySQL dedicado a la base de practicas, no root. Variables de entorno:
+| Ruta | Descripción |
+| --- | --- |
+| `src/` | Clases de dominio, acceso a datos, menú y pruebas de POO. |
+| `sql/schema.sql` | Estructura inicial de la base de datos. |
+| `sql/ap2_migracion.sql` | Ampliación del esquema correspondiente a AP2. |
+| `sql/datos_demo.sql` | Datos demostrativos de técnico y repuesto. |
+| `sql/validacion.sql` | Consultas de verificación de los datos persistidos. |
+| `sql/consultas.sql` | Consultas originales de AP2, incluidas con fines de trazabilidad. |
+| `docs/` | Diagramas de clases y del proceso en formatos DOT y PNG. |
+| `evidencias/` | Salidas registradas de compilación/menú y pruebas de clases. |
+| `01_compilar_y_probar.bat` | Compilación y pruebas POO en Windows. |
+| `02_ejecutar_con_mysql.bat` | Compilación y ejecución con MySQL Connector/J en Windows. |
 
-- `ST_DB_URL`: si se omite, `jdbc:mysql://localhost:3306/servicio_tecnico?useSSL=false&serverTimezone=UTC`.
-- `ST_DB_USER`: si se omite, `root` (solo conveniencia para el prototipo local).
-- `ST_DB_PASS`: si se omite, cadena vacia.
+## Modelo orientado a objetos
 
-> Para un servidor remoto, usar TLS verificado y credenciales especificas; la configuracion de ejemplo es solamente local.
+- **Abstracción:** clase abstracta `Persona`, con el método `descripcion()`.
+- **Herencia:** `Cliente` y `Tecnico` extienden `Persona`.
+- **Polimorfismo:** redefinición de `descripcion()` y despacho dinámico en `Main.imprimirPersonas()`.
+- **Encapsulamiento:** atributos privados, constructores, métodos de acceso y validaciones de las entidades.
+- **Estructuras y algoritmos:** `List`, `ArrayList`, `Comparator`, ordenación por fecha e ID, búsqueda por identificador y filtrado por estado.
+- **Control de flujo y errores:** `while`, `switch`, `if`, validaciones, excepciones y transacciones JDBC.
 
-## Ejecucion rapida en Windows 11
+## Base de datos
 
-1. Instalar JDK 17+ y comprobar en CMD con `java -version` y `javac -version`.
-2. Doble clic en `01_compilar_y_probar.bat`: compila y ejecuta 8 pruebas que **no necesitan MySQL**.
-3. Desde MySQL Workbench preparar base y datos segun la seccion anterior.
-4. Descargar MySQL Connector/J (driver JDBC oficial), extraer el archivo JAR, y colocarlo como `lib\mysql-connector-j.jar` (se puede renombrar el JAR).
-5. Configurar en CMD los datos de conexion **antes** de abrir el lanzador desde esa consola, por ejemplo:
+Para una instalación nueva, el esquema se crea ejecutando `sql/schema.sql` y a continuación `sql/ap2_migracion.sql`. La migración se aplica una sola vez. En una instalación preexistente de AP2 se utiliza la misma base de datos, sin repetir la migración.
 
-```bat
-set ST_DB_URL=jdbc:mysql://localhost:3306/servicio_tecnico?useSSL=false&serverTimezone=UTC
-set ST_DB_USER=usuario_prototipo
-set ST_DB_PASS=TU_CLAVE_LOCAL
-02_ejecutar_con_mysql.bat
-```
+`sql/datos_demo.sql` incluye registros de demostración. `sql/validacion.sql` permite consultar órdenes, historial, presupuestos y repuestos sin alterar la información. El archivo `sql/consultas.sql`, conservado desde AP2, incluye sentencias de ejemplo que modifican datos.
 
-   Si abris el BAT por doble clic, no heredara las variables de la consola anterior: ejecutalo desde la misma terminal donde usaste `set`.
+La conexión JDBC utiliza las variables de entorno `ST_DB_URL`, `ST_DB_USER` y `ST_DB_PASS`. Sus valores predeterminados están definidos en `src/Database.java` y corresponden a una instalación local de demostración. Las credenciales no se almacenan en el repositorio.
 
-## Compilacion y pruebas
+## Compilación y ejecución
 
-En Windows CMD, ubicado en la carpeta de AP3:
+### Windows
 
 ```bat
 javac -encoding UTF-8 -d out src\*.java
 java -cp out PruebasPOO
 ```
 
-Para ejecutar las operaciones MySQL, reemplazar la ruta por la ubicacion real de **mysql-connector-j-*.jar**:
+Para ejecutar el programa con MySQL, se requiere el controlador oficial `mysql-connector-j.jar` en `lib/` y una instancia MySQL compatible:
 
 ```bat
-java -cp "out;C:\ruta\mysql-connector-j-9.x.x.jar" Main
+set ST_DB_URL=jdbc:mysql://localhost:3306/servicio_tecnico?useSSL=false&serverTimezone=UTC
+set ST_DB_USER=usuario_mysql
+set ST_DB_PASS=clave_local
+02_ejecutar_con_mysql.bat
 ```
 
-En Linux/macOS el separador es `:`:
+### Linux / macOS
 
 ```sh
 javac -encoding UTF-8 -d out src/*.java
 java -cp out PruebasPOO
-java -cp "out:/ruta/mysql-connector-j.jar" Main
+java -cp 'out:lib/mysql-connector-j.jar' Main
 ```
 
-Si aparece `No suitable driver` o un error de conexion, verificar Connector/J, puerto de MySQL, base, usuario y contraseña antes de volver a ejecutar.
+## Funcionalidades del menú
 
-## Prueba funcional sugerida (sobre BD real)
+La aplicación de consola permite registrar y listar clientes, ingresar equipos y órdenes, diagnosticar, presupuestar, aprobar o rechazar presupuestos, finalizar reparaciones, registrar repuestos, entregar equipos, consultar historial y técnicos, buscar órdenes por ID y filtrarlas por estado.
 
-1. Abrir menu 12: verificar tecnico de prueba y su ID real.
-2. Menu 1: crear un cliente; anotar ID real.
-3. Menu 3: ingresar un equipo y una orden; anotar IDs reales de la orden y del equipo (para historial). Orden queda RECIBIDO.
-4. Menu 5: diagnosticar con el ID de tecnico -> EN_DIAGNOSTICO.
-5. Menu 6: presupuestar (ej. 45000.00) -> PRESUPUESTADO.
-6. Menu 7: responder S -> EN_REPARACION.
-7. Menu 8: finalizar reparacion -> LISTO.
-8. Menu 9 (opcional): descontar repuesto mientras la orden esta LISTO (flujo AP2 conservado).
-9. Menu 10: entregar -> ENTREGADO.
-10. Consultar menus 4, 11, 13, 14 y `sql/validacion.sql`.
-11. Prueba negativa: en otra orden, rechazar el presupuesto con N -> CANCELADO. Verificar que no pueda finalizarse una reparacion de esa orden.
-12. Prueba negativa: monto negativo, orden inexistente o stock insuficiente deben devolver error y preservar los registros previos.
+## Validación y alcance
 
-## Alcance de programacion orientada a objetos
+- **Compilación:** correcta con OpenJDK 21.
+- **Pruebas de dominio:** 8 de 8 verificaciones aprobadas, documentadas en `evidencias/pruebas_poo.txt`.
+- **Menú de consola:** arranque, entrada inválida y salida comprobados sin conexión a la base de datos, registrados en `evidencias/menu_compilacion.txt`.
+- **Integración AP3 con MySQL:** sin evidencia de ejecución integral correspondiente a esta versión. Los módulos JDBC mantienen el esquema y las reglas de AP2; su integración puede reproducirse mediante las operaciones del menú y `sql/validacion.sql`.
 
-- **Abstraccion:** `Persona` es abstracta y declara `descripcion()`; `OrdenServicio` resume una orden sin exponer JDBC.
-- **Herencia:** `Cliente extends Persona` y `Tecnico extends Persona`.
-- **Polimorfismo:** `Main.imprimirPersonas(List<? extends Persona>)` invoca `descripcion()` dinamicamente en ambos tipos.
-- **Encapsulamiento:** campos `private final` y getters/validaciones de `Cliente`, `Tecnico`, `Equipo`, `OrdenServicio`.
-- **Colecciones:** `ArrayList` de personas y ordenes, `Comparator` para ordenar.
-- **Busqueda:** `OrdenDAO.buscarPorId()` y `buscarPorEstado()` con sentencias parametrizadas e indices previos de AP2.
-- **Flujo:** menu `switch`, `while`, `for`, `if`, excepciones de datos, estado y SQL.
-- **Persistencia:** JDBC, `PreparedStatement`, recursos autocerrables y transacciones/rollback heredadas de AP2.
+Se trata de un prototipo académico: no incluye autenticación, interfaz gráfica ni despliegue productivo. Los usuarios de demostración no habilitan un mecanismo de inicio de sesión.
 
-## Evidencias y limites
+## Repositorio
 
-- `evidencias/pruebas_poo.txt`: **8** pruebas de clases POO ejecutadas, sin BD.
-- `evidencias/menu_compilacion.txt`: salida **real** de arranque, opcion invalida, regreso al menu y salida; sin BD.
-- El codigo Java fue compilado satisfactoriamente con `javac 21`.
-- **No se incluyo una prueba MySQL de AP3 ejecutada en este entorno**: el flujo integrado debe reproducirse localmente en MySQL 8.x usando el instructivo anterior. Se conserva el codigo AP2 previamente documentado y probado en el TP2.
-- No hay autenticacion, interfaz grafica ni tests automatizados de integracion MySQL. El campo `clave_hash` para tecnico de prueba **no** contiene una contraseña utilizable. No se debe implementar o simular un login con ese dato.
-- El prototipo AP2 registra repuestos despues de finalizar reparacion (`LISTO`) y antes de entregar; esta regla se conserva explicitamente.
-
-## GitHub / entrega
-
-Repositorio utilizado en AP2 (antecedente conocido):
-https://github.com/marcos350151/seminario-practica-ap1-servicio-tecnico/tree/ap2-seminario-2026
-
-**AP3 aun debe subirse a GitHub** (por ejemplo a una rama `ap3-seminario-2026`). Una vez publicado, copiar la URL completa de esa rama en el PDF, en el apartado "Codigo fuente". No se afirma que AP3 ya este publicado.
-
-### Organizacion
-
-- `src/` codigo Java.
-- `sql/` esquema AP1, migracion AP2, consultas y demos.
-- `evidencias/` registros de comprobaciones efectivamente realizadas.
-- `docs/` diagramas UML y flujo.
-- PDF separado: informe academico AP3.
+https://github.com/marcos350151/seminario-practica-ap3-servicio-tecnico
