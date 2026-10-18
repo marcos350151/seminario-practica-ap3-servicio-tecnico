@@ -1,0 +1,21 @@
+Sistema de Gestion - Servicio Tecnico (prototipo AP3 - Java POO)
+
+1) Alta cliente                 2) Listar clientes
+3) Ingresar equipo y orden      4) Listar ordenes
+5) Diagnosticar                 6) Presupuestar
+7) Decidir presupuesto         8) Finalizar reparacion
+9) Usar repuesto               10) Entregar equipo
+11) Historial del equipo       12) Listar tecnicos
+13) Buscar orden por ID        14) Filtrar ordenes por estado
+0) Salir
+Opcion: Opcion no reconocida.
+
+1) Alta cliente                 2) Listar clientes
+3) Ingresar equipo y orden      4) Listar ordenes
+5) Diagnosticar                 6) Presupuestar
+7) Decidir presupuesto         8) Finalizar reparacion
+9) Usar repuesto               10) Entregar equipo
+11) Historial del equipo       12) Listar tecnicos
+13) Buscar orden por ID        14) Filtrar ordenes por estado
+0) Salir
+Opcion: Fin del programa.

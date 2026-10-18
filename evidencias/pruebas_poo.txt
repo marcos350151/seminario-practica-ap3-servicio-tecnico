@@ -1,0 +1,9 @@
+OK Polimorfismo cliente
+OK Polimorfismo tecnico
+OK Encapsulamiento / getter
+OK Validacion de nombre
+OK Validacion de equipo
+OK Conversion de estado
+OK Estado invalido controlado
+OK Constructor / resumen de orden
+RESULTADO: 8 pruebas aprobadas.

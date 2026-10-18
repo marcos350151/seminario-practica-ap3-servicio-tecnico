@@ -1,0 +1,18 @@
+digraph flujo {
+ graph [rankdir=LR, bgcolor="white", nodesep=0.30, ranksep=0.45, pad=0.15];
+ node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=10, margin="0.13,0.12", color="#436178", fillcolor="#eef4fa"];
+ edge [fontname="DejaVu Sans", fontsize=9, color="#3e617e", arrowsize=0.7];
+ recibido [label="RECIBIDO"];
+ diag [label="EN_DIAGNOSTICO"];
+ pres [label="PRESUPUESTADO"];
+ rep [label="EN_REPARACION"];
+ listo [label="LISTO"];
+ entregado [label="ENTREGADO", fillcolor="#def7e9"];
+ cancelado [label="CANCELADO", fillcolor="#fee6e3"];
+ recibido -> diag [label="diagnosticar"];
+ diag -> pres [label="presupuestar"];
+ pres -> rep [label="aceptar"];
+ pres -> cancelado [label="rechazar"];
+ rep -> listo [label="finalizar"];
+ listo -> entregado [label="entregar"];
+}

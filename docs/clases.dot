@@ -1,0 +1,16 @@
+digraph UML {
+ graph [rankdir=TB, bgcolor="white", nodesep=0.42, ranksep=0.55, splines=polyline, pad=0.2];
+ node [shape=record, fontname="DejaVu Sans", fontsize=12, style="rounded,filled", fillcolor="#f1f5fa", color="#45647c", penwidth=1.1];
+ edge [color="#476780", arrowsize=0.8];
+ Persona [label="{Persona (abstracta)|- id: int\l- nombre: String\l|+ getId(): int\l+ getNombre(): String\l+ descripcion(): String (abstracta)\l}", fillcolor="#dbeafe"];
+ Cliente [label="{Cliente| - telefono: String\l - email: String\l | + descripcion(): String\l}"];
+ Tecnico [label="{Tecnico| - activo: boolean\l | + descripcion(): String\l}"];
+ Equipo [label="{Equipo|- idCliente: int\l- tipo: String\l- marca: String\l- modelo: String\l|+ getTipo(): String\l}"];
+ OrdenServicio [label="{OrdenServicio|- id: int\l- cliente: String\l- estado: EstadoOrden\l- fechaIngreso: LocalDateTime\l|+ resumen(): String\l}"];
+ EstadoOrden [label="{EstadoOrden (enum)|RECIBIDO / EN_DIAGNOSTICO\lPRESUPUESTADO / EN_REPARACION\lLISTO / ENTREGADO / CANCELADO\l}", fillcolor="#eaf2ff"];
+ {rank=same; Cliente; Tecnico}
+ {rank=same; Equipo; OrdenServicio}
+ Cliente -> Persona [arrowhead=empty];
+ Tecnico -> Persona [arrowhead=empty];
+ OrdenServicio -> EstadoOrden [label=" usa", arrowhead=vee, style=dashed];
+}

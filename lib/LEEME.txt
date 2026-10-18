@@ -1,0 +1,3 @@
+Colocar en esta carpeta el archivo JAR oficial MySQL Connector/J.
+Renombrarlo a mysql-connector-j.jar para usar 02_ejecutar_con_mysql.bat.
+El driver no se redistribuye en este ZIP.
